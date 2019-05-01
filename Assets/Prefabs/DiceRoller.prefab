@@ -43,7 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 443384fc9a8fe3c4e9d772cc5e2bc07a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dicePrefab: {fileID: 4737002636612385978, guid: 69bdf05627cc06a4b8e7997bb5fcad80,
+  dicePrefab: {fileID: 833382649655659626, guid: 69bdf05627cc06a4b8e7997bb5fcad80,
     type: 3}
   worldCamera: {fileID: 0}
   numDice: 2

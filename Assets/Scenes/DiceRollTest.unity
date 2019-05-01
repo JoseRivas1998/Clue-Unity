@@ -427,5 +427,10 @@ PrefabInstance:
       propertyPath: worldCamera
       value: 
       objectReference: {fileID: 534669904}
+    - target: {fileID: 7552498674131214699, guid: 84cbecce85d9e5b449e6961ff7dc9b91,
+        type: 3}
+      propertyPath: numDice
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 84cbecce85d9e5b449e6961ff7dc9b91, type: 3}

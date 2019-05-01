@@ -14,15 +14,15 @@ public class DiceDirection : MonoBehaviour
     {
         lookUp = new Dictionary<Vector3, int>();
         // Positives
-        lookUp[Vector3.up] = 4;
+        lookUp[Vector3.up] = 1;
         lookUp[Vector3.right] = 2;
-        lookUp[Vector3.forward] = 6;
+        lookUp[Vector3.forward] = 4;
 
         // Negatives
         // These are hard coded for now
-        lookUp[Vector3.down] = 5;
-        lookUp[Vector3.left] = 1;
-        lookUp[Vector3.back] = 3;
+        lookUp[Vector3.down] = 7 - lookUp[Vector3.up];
+        lookUp[Vector3.left] = 7 - lookUp[Vector3.right];
+        lookUp[Vector3.back] = 7 - lookUp[Vector3.forward];
     }
 
     public int getNumber(float epsilonDeg = 5f)
