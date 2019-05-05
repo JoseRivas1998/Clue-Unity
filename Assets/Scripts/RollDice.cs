@@ -7,7 +7,7 @@ public class RollDice : MonoBehaviour
 
     public GameObject dicePrefab;
     public Camera worldCamera;
-    [Range(1,100)]
+    [Range(1, 100)]
     public int numDice = 2;
     public float diceDistance = 1.0f;
     public float tossForce = 200f;
@@ -15,7 +15,7 @@ public class RollDice : MonoBehaviour
     public float maxForceOffset = 100.0f;
     public float minTorque = -400.0f;
     public float maxTorque = 400.0f;
-    
+
 
     public enum DiceRollerState
     {
@@ -41,7 +41,7 @@ public class RollDice : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        switch(currentState)
+        switch (currentState)
         {
             case DiceRollerState.HoldingDice:
                 UpdateHoldingDice();
@@ -61,9 +61,9 @@ public class RollDice : MonoBehaviour
 
     private void UpdateHoldingDice()
     {
-        if(Input.GetKeyUp(KeyCode.Space))
+        if (Input.GetKeyUp(KeyCode.Space))
         {
-            foreach(var die in dice)
+            foreach (var die in dice)
             {
                 Rigidbody dieBody = die.GetComponent<Rigidbody>();
                 Vector3 force = Vector3.Normalize(worldCamera.transform.forward) * tossForce;
@@ -90,7 +90,7 @@ public class RollDice : MonoBehaviour
         yield return CheckIfDiceAreMoving();
 
         diceValue = 0;
-        foreach(var die in dice)
+        foreach (var die in dice)
         {
             DiceDirection diceDrection = die.GetComponent<DiceDirection>();
             diceValue += diceDrection.getNumber();
@@ -115,11 +115,16 @@ public class RollDice : MonoBehaviour
 
     private void UpdateComplete()
     {
-        if(Input.GetKeyUp(KeyCode.Space))
+        if (Input.GetKeyUp(KeyCode.Space))
         {
             ActivateRoller();
         }
-        print(diceValue);
+        List<int[]> locations = PossibleBoardLocations.GetBoardLocations(5, 4, diceValue, (loc => loc[0] >= 0 && loc[1] >= 0));
+        foreach (int[] loc in locations)
+        {
+            print("[" + loc[0] + ", " + loc[1] + "]");
+        }
+        ActivateRoller();
     }
 
     private void CreateDice()
@@ -127,7 +132,7 @@ public class RollDice : MonoBehaviour
         Transform camTransform = worldCamera.transform;
         int mid = numDice / 2;
         Vector3 middle = camTransform.position + camTransform.forward * diceDistance;
-        for(int i = 0; i < numDice; i++)
+        for (int i = 0; i < numDice; i++)
         {
             int distToMid = i - mid;
             Vector3 spawn = new Vector3(middle.x, middle.y, middle.z);
@@ -139,7 +144,7 @@ public class RollDice : MonoBehaviour
 
     private void DestroyDice()
     {
-        for(int i = 0; i < numDice; i++)
+        for (int i = 0; i < numDice; i++)
         {
             Destroy(dice[i]);
         }
@@ -147,12 +152,12 @@ public class RollDice : MonoBehaviour
 
     public void ActivateRoller()
     {
-        if(currentState == DiceRollerState.Inactive)
+        if (currentState == DiceRollerState.Inactive)
         {
             CreateDice();
             currentState = DiceRollerState.HoldingDice;
-        } 
-        else if(currentState == DiceRollerState.Complete)
+        }
+        else if (currentState == DiceRollerState.Complete)
         {
             DestroyDice();
             currentState = DiceRollerState.Inactive;
