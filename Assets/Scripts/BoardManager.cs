@@ -30,7 +30,7 @@ public class BoardManager : MonoBehaviour
         tileHeight = (topLeft.z - bottomRight.z) / numRows;
         for(int i = 0; i < 4; i++)
         {
-            PlaceCharacter(ClueGameManager.Instance.GetPlayer(i), i);
+            PlaceCharacter(ClueData.Instance.GetPlayer(i), i);
         }
     }
 

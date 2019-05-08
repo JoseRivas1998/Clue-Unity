@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ClueGameManager : Singleton<ClueGameManager>
+public class ClueData : Singleton<ClueData>
 {
 
     private CharacterResourceManager.Cards[] players = new CharacterResourceManager.Cards[4];

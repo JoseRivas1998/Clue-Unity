@@ -11,7 +11,7 @@ public class HumanPlayerLoadCards : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        List<CharacterResourceManager.Cards> playerCards = ClueGameManager.Instance.GetPlayerCards(0);
+        List<CharacterResourceManager.Cards> playerCards = ClueData.Instance.GetPlayerCards(0);
         for(int i = 0; i < rawImages.Length; i++)
         {
             Texture2D texture = CharacterResourceManager.CardImageTexture(playerCards[i]);

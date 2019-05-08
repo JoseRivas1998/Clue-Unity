@@ -22,7 +22,7 @@ public class CharacterSelect : MonoBehaviour
                 selected = true;
                 List<CharacterResourceManager.Cards> selectedCards = new List<CharacterResourceManager.Cards>();
                 selectedCards.Add(card);
-                ClueGameManager.Instance.SetPlayer(0, card);
+                ClueData.Instance.SetPlayer(0, card);
                 int numCards = CharacterResourceManager.Characters.Count;
                 for(int i = 1; i < 4; i++)
                 {
@@ -32,9 +32,9 @@ public class CharacterSelect : MonoBehaviour
                         aiCard = CharacterResourceManager.Characters[Random.Range(0, numCards - 1)];
                     } while (selectedCards.Contains(aiCard));
                     selectedCards.Add(aiCard);
-                    ClueGameManager.Instance.SetPlayer(i, aiCard);
+                    ClueData.Instance.SetPlayer(i, aiCard);
                 }
-                ClueGameManager.Instance.GenerateSolutionAndDistributeCards();
+                ClueData.Instance.GenerateSolutionAndDistributeCards();
                 SceneManager.LoadScene("DaGame");
             }
         }
