@@ -19,7 +19,9 @@ public class BoardManager : MonoBehaviour
     public GameObject ScoobyPrefab;
 
     private float tileWidth;
+    public float TileWidth => tileWidth;
     private float tileHeight;
+    public float TileHeigh => tileHeight;
 
     private readonly int[,] startingPositions = new int[4, 2] { { 9, 9 }, { 9, 11 }, { 9, 13 }, { 9, 15 } };
 
@@ -77,7 +79,12 @@ public class BoardManager : MonoBehaviour
 
     public Vector3 RowColToBoardLocation(int row, int col)
     {
-        return new Vector3(topLeft.x + (col * tileWidth) + (tileWidth * 0.5f), 0, (topLeft.z - (row * tileHeight) - (tileHeight * 0.5f)));
+        return RowColToBoardLocation(row, col, 0);
+    }
+
+    public Vector3 RowColToBoardLocation(int row, int col, float y)
+    {
+        return new Vector3(topLeft.x + (col * tileWidth) + (tileWidth * 0.5f), y, (topLeft.z - (row * tileHeight) - (tileHeight * 0.5f)));
     }
 
     public int[] MouseCoordinatesToGridCoordinates()

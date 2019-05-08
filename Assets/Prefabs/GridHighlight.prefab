@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 9047490218060874418}
   - component: {fileID: 6735003578807867393}
   - component: {fileID: 5186748628213809338}
+  - component: {fileID: 1065687185530633936}
+  - component: {fileID: 6683072267902620465}
   m_Layer: 0
   m_Name: GridHighlight
   m_TagString: Untagged
@@ -77,3 +79,29 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!114 &1065687185530633936
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1636201595993850830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2632640e9246d24478d7bcd5ca1bcf1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cgm: {fileID: 0}
+--- !u!65 &6683072267902620465
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1636201595993850830}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 10, y: 2.220446e-16, z: 10}
+  m_Center: {x: 0, y: 0, z: 0}

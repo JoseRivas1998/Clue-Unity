@@ -120,6 +120,11 @@ public class ClueData : Singleton<ClueData>
         playerLocations[player] = GetRowColl(position);
     }
 
+    public void SetPlayerLocation(RowCol location, int player)
+    {
+        playerLocations[player] = location;
+    }
+
     public RowCol GetPlayerRowCol(int player)
     {
         return playerLocations[player];
@@ -128,6 +133,16 @@ public class ClueData : Singleton<ClueData>
     public int[] GetPlayerLocation(int player)
     {
         return new int[] { playerLocations[player].row, playerLocations[player].col };
+    }
+
+    public bool HasPlayerSeenCard(CharacterResourceManager.Cards card, int player)
+    {
+        return playerData[player].HasSeenCard(card);
+    }
+
+    public void ShowPlayerCard(CharacterResourceManager.Cards card, int player)
+    {
+        playerData[player].ShowCard(card);
     }
 
 }
