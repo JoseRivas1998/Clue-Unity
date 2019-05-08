@@ -38,9 +38,9 @@ public class CharacterResourceManager
         { Cards.Freddie, CardType.Character },
         { Cards.ScoobyDoo, CardType.Character },
         { Cards.MurderV, CardType.Character },
-        { Cards.Sherlock, CardType.Character },
         { Cards.Blackwidow, CardType.Character },
         { Cards.Echo, CardType.Character },
+        { Cards.Sherlock, CardType.Character },
         { Cards.Machete, CardType.Weapon },
         { Cards.Bazooka, CardType.Weapon },
         { Cards.Antifreeze, CardType.Weapon },
@@ -54,6 +54,29 @@ public class CharacterResourceManager
         { Cards.Nursery, CardType.Room },
         { Cards.Morge, CardType.Room },
         { Cards.Maze, CardType.Room },
+    };
+
+    private static readonly Dictionary<Cards, string> _cardImages = new Dictionary<Cards, string>()
+    {
+        { Cards.Blackwidow, "CardImages/blackwidow" },
+        { Cards.Echo, "CardImages/echo" },
+        { Cards.Freddie, "CardImages/kreuger" },
+        { Cards.ScoobyDoo, "CardImages/scooby" },
+        { Cards.Sherlock, "CardImages/sherlock" },
+        { Cards.MurderV, "CardImages/victim" },
+        { Cards.Machete, "CardImages/pending" },
+        { Cards.Bazooka, "CardImages/pending" },
+        { Cards.Antifreeze, "CardImages/pending" },
+        { Cards.Chainsaw, "CardImages/pending" },
+        { Cards.Spoon, "CardImages/pending" },
+        { Cards.Syringe, "CardImages/pending" },
+        { Cards.HannibalsKitchen, "CardImages/pending" },
+        { Cards.PuppetRoom, "CardImages/pending" },
+        { Cards.Cemetary, "CardImages/pending" },
+        { Cards.ChuckysPlayroom, "CardImages/pending" },
+        { Cards.Nursery, "CardImages/pending" },
+        { Cards.Morge, "CardImages/pending" },
+        { Cards.Maze, "CardImages/pending" },
     };
 
     // TODO: Map Cards to Textures, Load Texture based on Given Card
@@ -81,5 +104,16 @@ public class CharacterResourceManager
     public readonly static List<Cards> Characters = FilterCardsOfType(CardType.Character);
     public readonly static List<Cards> Weapons = FilterCardsOfType(CardType.Weapon);
     public readonly static List<Cards> Rooms = FilterCardsOfType(CardType.Room);
+
+    public static string CardImage(Cards card)
+    {
+        return _cardImages[card];
+    }
+
+    public static Texture2D CardImageTexture(Cards card)
+    {
+        Texture2D texture = Resources.Load<Texture2D>(_cardImages[card]);
+        return texture;
+    }
 
 }
