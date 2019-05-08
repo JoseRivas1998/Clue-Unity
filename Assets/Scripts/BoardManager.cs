@@ -60,7 +60,7 @@ public class BoardManager : MonoBehaviour
                 break;
         }
         gm.transform.Rotate(0, 180, 0);
-        print(spawn);
+        ClueData.Instance.SetPlayerGameObject(gm, player);
     }
 
     private GameObject PlaceObject(GameObject gameObject, Vector3 pos)
@@ -71,7 +71,7 @@ public class BoardManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        MouseCoordinatesToGridCoordinates();
+        //MouseCoordinatesToGridCoordinates();
     }
 
     public Vector3 RowColToBoardLocation(int row, int col)

@@ -10,6 +10,12 @@ public class TurnManager : MonoBehaviour
     public SequenceMode sequenceMode = SequenceMode.ByPlayerNumber;
     public CycleMode cycleMode = CycleMode.Loop;
 
+    struct TurnManagerData
+    {
+        public int turnCursor;
+        public bool goBackwards;
+    }
+
     public enum SequenceMode
     {
         ByPlayerNumber, ByPlayerNumberReversed,
@@ -28,6 +34,7 @@ public class TurnManager : MonoBehaviour
     public int CurrentTurn { get { return turnSequence[turnCursor]; } }
 
     private bool goBackwards;
+    private Stack<TurnManagerData> turnStack;
 
     void Start()
     {
@@ -166,6 +173,28 @@ public class TurnManager : MonoBehaviour
                     goBackwards = false;
                     break;
             }
+        }
+    }
+
+    public void PushStack()
+    {
+        TurnManagerData currentData;
+        currentData.turnCursor = turnCursor;
+        currentData.goBackwards = goBackwards;
+        if(turnStack == null)
+        {
+            turnStack = new Stack<TurnManagerData>();
+        }
+        turnStack.Push(currentData);
+    }
+
+    public void PopStack()
+    {
+        if(turnStack != null && turnStack.Count > 0)
+        {
+            TurnManagerData newData = turnStack.Pop();
+            turnCursor = newData.turnCursor;
+            goBackwards = newData.goBackwards;
         }
     }
 

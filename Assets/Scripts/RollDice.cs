@@ -35,7 +35,6 @@ public class RollDice : MonoBehaviour
     {
         currentState = DiceRollerState.Inactive;
         dice = new GameObject[numDice];
-        ActivateRoller();
     }
 
     // Update is called once per frame
@@ -61,24 +60,26 @@ public class RollDice : MonoBehaviour
 
     private void UpdateHoldingDice()
     {
-        if (Input.GetKeyUp(KeyCode.Space))
+        
+    }
+
+    public void TossDice()
+    {
+        foreach (var die in dice)
         {
-            foreach (var die in dice)
-            {
-                Rigidbody dieBody = die.GetComponent<Rigidbody>();
-                Vector3 force = Vector3.Normalize(worldCamera.transform.forward) * tossForce;
-                Vector3 forceOffset = Vector3.up * Random.Range(minForceOffset, maxForceOffset);
-                Vector3 torque = new Vector3(
-                    Random.Range(minTorque, maxTorque),
-                    Random.Range(minTorque, maxTorque),
-                    Random.Range(minTorque, maxTorque)
-                );
-                dieBody.AddForce(force + forceOffset);
-                dieBody.AddTorque(torque);
-                dieBody.useGravity = true;
-            }
-            currentState = DiceRollerState.DiceRolling;
+            Rigidbody dieBody = die.GetComponent<Rigidbody>();
+            Vector3 force = Vector3.Normalize(worldCamera.transform.forward) * tossForce;
+            Vector3 forceOffset = Vector3.up * Random.Range(minForceOffset, maxForceOffset);
+            Vector3 torque = new Vector3(
+                Random.Range(minTorque, maxTorque),
+                Random.Range(minTorque, maxTorque),
+                Random.Range(minTorque, maxTorque)
+            );
+            dieBody.AddForce(force + forceOffset);
+            dieBody.AddTorque(torque);
+            dieBody.useGravity = true;
         }
+        currentState = DiceRollerState.DiceRolling;
     }
 
     /*
@@ -92,6 +93,7 @@ public class RollDice : MonoBehaviour
         diceValue = 0;
         foreach (var die in dice)
         {
+            if (die == null) continue;
             DiceDirection diceDrection = die.GetComponent<DiceDirection>();
             diceValue += diceDrection.getNumber();
         }
@@ -115,16 +117,7 @@ public class RollDice : MonoBehaviour
 
     private void UpdateComplete()
     {
-        if (Input.GetKeyUp(KeyCode.Space))
-        {
-            ActivateRoller();
-        }
-        List<int[]> locations = PossibleBoardLocations.GetBoardLocations(5, 4, diceValue, (loc => loc[0] >= 0 && loc[1] >= 0));
-        foreach (int[] loc in locations)
-        {
-            print("[" + loc[0] + ", " + loc[1] + "]");
-        }
-        ActivateRoller();
+        
     }
 
     private void CreateDice()
@@ -139,6 +132,7 @@ public class RollDice : MonoBehaviour
             dice[i] = Instantiate(dicePrefab, spawn, camTransform.rotation);
             dice[i].GetComponent<Rigidbody>().useGravity = false;
             dice[i].transform.position += Vector3.right * (distToMid * 0.5f);
+            dice[i].transform.Rotate(Random.Range(0, 360f), Random.Range(0, 360f), Random.Range(0, 360f));
         }
     }
 
@@ -147,6 +141,15 @@ public class RollDice : MonoBehaviour
         for (int i = 0; i < numDice; i++)
         {
             Destroy(dice[i]);
+        }
+    }
+
+    public void DeactivateRoller()
+    {
+        if(currentState == DiceRollerState.Complete)
+        {
+            DestroyDice();
+            currentState = DiceRollerState.Inactive;
         }
     }
 

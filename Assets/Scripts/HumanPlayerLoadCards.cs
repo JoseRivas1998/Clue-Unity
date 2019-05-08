@@ -24,4 +24,20 @@ public class HumanPlayerLoadCards : MonoBehaviour
     {
         
     }
+
+    public void HideAll()
+    {
+        for(int i = 0; i < rawImages.Length; i++)
+        {
+            rawImages[i].SetActive(false);
+        }
+    }
+
+    public void ShowAll()
+    {
+        for(int i = 0; i < rawImages.Length; i++)
+        {
+            rawImages[i].SetActive(true);
+        }
+    }
 }

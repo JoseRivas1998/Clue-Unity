@@ -7,6 +7,7 @@ public class ClueData : Singleton<ClueData>
 
     private CharacterResourceManager.Cards[] players = new CharacterResourceManager.Cards[4];
     private PlayerData[] playerData = new PlayerData[4];
+    private GameObject[] playerGameObjects = new GameObject[4];
 
     private Guess solution;
 
@@ -89,6 +90,16 @@ public class ClueData : Singleton<ClueData>
     public List<CharacterResourceManager.Cards> GetPlayerCards(int player)
     {
         return playerData[player].Cards;
+    }
+
+    public void SetPlayerGameObject(GameObject go, int player)
+    {
+        this.playerGameObjects[player] = go;
+    }
+
+    public GameObject GetPlayerGameObject(int player)
+    {
+        return playerGameObjects[player];
     }
 
 }
