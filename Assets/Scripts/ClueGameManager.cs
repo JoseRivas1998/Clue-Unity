@@ -9,6 +9,7 @@ public class ClueGameManager : MonoBehaviour
     public TurnManager turnManager;
     public RollDice diceRoller;
     public CameraFollow camFollower;
+    public BoardManager boardManager;
 
     public enum TurnState
     {

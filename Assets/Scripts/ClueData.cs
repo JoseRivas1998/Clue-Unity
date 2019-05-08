@@ -5,9 +5,17 @@ using UnityEngine;
 public class ClueData : Singleton<ClueData>
 {
 
+    public struct RowCol
+    {
+        public int row;
+        public int col;
+    }
+
     private CharacterResourceManager.Cards[] players = new CharacterResourceManager.Cards[4];
     private PlayerData[] playerData = new PlayerData[4];
     private GameObject[] playerGameObjects = new GameObject[4];
+    private RowCol[] playerLocations = new RowCol[4];
+    
 
     private Guess solution;
 
@@ -20,6 +28,11 @@ public class ClueData : Singleton<ClueData>
     void Update()
     {
         
+    }
+
+    public static RowCol GetRowColl(int[] position)
+    {
+        return new RowCol { row = position[0], col = position[1] };
     }
 
     public void SetPlayer(int player, CharacterResourceManager.Cards card)
@@ -100,6 +113,21 @@ public class ClueData : Singleton<ClueData>
     public GameObject GetPlayerGameObject(int player)
     {
         return playerGameObjects[player];
+    }
+
+    public void SetPlayerLocation(int[] position, int player)
+    {
+        playerLocations[player] = GetRowColl(position);
+    }
+
+    public RowCol GetPlayerRowCol(int player)
+    {
+        return playerLocations[player];
+    }
+
+    public int[] GetPlayerLocation(int player)
+    {
+        return new int[] { playerLocations[player].row, playerLocations[player].col };
     }
 
 }

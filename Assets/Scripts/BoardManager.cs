@@ -36,6 +36,7 @@ public class BoardManager : MonoBehaviour
 
     void PlaceCharacter(CharacterResourceManager.Cards card, int player)
     {
+        ClueData.Instance.SetPlayerLocation(new int[]{ startingPositions[player, 0], startingPositions[player, 1]}, player);
         Vector3 spawn = RowColToBoardLocation(startingPositions[player, 0], startingPositions[player, 1]);
         GameObject gm = null;
         switch(card)
