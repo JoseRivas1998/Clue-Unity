@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ClueGameManager : MonoBehaviour
 {
@@ -11,6 +12,14 @@ public class ClueGameManager : MonoBehaviour
     public RollDice diceRoller;
     public CameraFollow camFollower;
     public BoardManager boardManager;
+    public GameObject characterGuessParent;
+    public GameObject weaponGuessParent;
+    public GuessDisplay guessDisplay;
+    public Texture2D cardBack;
+    public CardShow cardShow;
+    public AccusationOption accusationOption;
+
+    public Text currentTurnText;
 
     public GameObject highlight;
 
@@ -37,6 +46,7 @@ public class ClueGameManager : MonoBehaviour
         new ClueData.RowCol{col = 10, row = 19},
         new ClueData.RowCol{col = 11, row = 19},
         new ClueData.RowCol{col = 0, row = 18},
+        new ClueData.RowCol{col = 24, row = 18},
     };
 
     public struct RoomEntrance
@@ -112,7 +122,7 @@ public class ClueGameManager : MonoBehaviour
             room = CharacterResourceManager.Cards.Maze,
             entrances = new ClueData.RowCol[]
             {
-                new ClueData.RowCol{row = 18, col = 14 }
+                new ClueData.RowCol{row = 18, col = 24 }
             }
         }
     };
@@ -124,6 +134,7 @@ public class ClueGameManager : MonoBehaviour
         Moving,
         ChoosingGuessCharacter,
         ChoosingGuessWeapon,
+        ShowingGuess,
         FindingCards,
         ShowingCards,
         AccusationOption,
@@ -135,6 +146,13 @@ public class ClueGameManager : MonoBehaviour
     private bool isSelected;
     private bool isMoving;
     private Vector3 targetPosition;
+
+    private bool makeAccusation;
+
+    private CharacterResourceManager.Cards guessCharacter;
+    private CharacterResourceManager.Cards guessWeapon;
+    private CharacterResourceManager.Cards guessRoom;
+    private Guess guess;
 
     private float aiTimer;
 
@@ -149,6 +167,7 @@ public class ClueGameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        currentTurnText.text = "Player " + turnManager.CurrentTurn + "'s Turn";
         switch(turnState)
         {
             case TurnState.PreTurn: PreTurn(); break;
@@ -156,6 +175,7 @@ public class ClueGameManager : MonoBehaviour
             case TurnState.Moving: Moving(); break;
             case TurnState.ChoosingGuessCharacter: ChoosingGuessCharacter(); break;
             case TurnState.ChoosingGuessWeapon: ChoosingGuessWeapon(); break;
+            case TurnState.ShowingGuess: ShowingGuess(); break;
             case TurnState.FindingCards: FindingCards(); break;
             case TurnState.ShowingCards: ShowingCards(); break;
             case TurnState.AccusationOption: AccusationOption(); break;
@@ -177,7 +197,7 @@ public class ClueGameManager : MonoBehaviour
 
     private void RollingDice()
     {
-        if(isCurrentTurnHuman())
+        if(IsCurrentTurnHuman())
         {
             if(diceRoller.RollerState.Equals(RollDice.DiceRollerState.HoldingDice))
             {
@@ -250,7 +270,7 @@ public class ClueGameManager : MonoBehaviour
             GameObject tile = Instantiate(highlight, spawn, Quaternion.identity);
             tile.GetComponent<TileSelector>().cgm = this;
             tile.GetComponent<TileSelector>().location = ClueData.GetRowColl(positions[i]);
-            tile.GetComponent<TileSelector>().clickable = isCurrentTurnHuman();
+            tile.GetComponent<TileSelector>().clickable = IsCurrentTurnHuman();
             highlights.Push(tile);
         }
     }
@@ -283,7 +303,7 @@ public class ClueGameManager : MonoBehaviour
             {
                 GameObject player = ClueData.Instance.GetPlayerGameObject(turnManager.CurrentTurn - 1);
                 player.transform.position += (targetPosition - player.transform.position) / 25f;
-                if((targetPosition - player.transform.position).magnitude < (boardManager.TileWidth / 6f))
+                if((targetPosition - player.transform.position).magnitude < (boardManager.TileWidth / 30f))
                 {
                     player.transform.position = targetPosition;
                     isMoving = false;
@@ -293,7 +313,14 @@ public class ClueGameManager : MonoBehaviour
             {
                 if(IsEntrance(ClueData.Instance.GetPlayerRowCol(turnManager.CurrentTurn - 1)))
                 {
-                    // To do
+                    humanCardsDisplay.HideAll();
+                    characterGuessParent.SetActive(true);
+                    isSelected = false;
+                    isMoving = false;
+                    CharacterResourceManager.Cards room = GetEntranceRoom(ClueData.Instance.GetPlayerRowCol(turnManager.CurrentTurn - 1));
+                    guessRoom = room;
+                    ClueData.Instance.GetPlayerGameObject(turnManager.CurrentTurn - 1).transform.position = CharacterResourceManager.RoomLocation(room);
+                    turnState = TurnState.ChoosingGuessCharacter;
                 }
                 else
                 {
@@ -301,7 +328,7 @@ public class ClueGameManager : MonoBehaviour
                 }
             }
         } 
-        else if(!isCurrentTurnHuman())
+        else if(!IsCurrentTurnHuman())
         {
             aiTimer += Time.deltaTime;
             if(aiTimer >= 1)
@@ -356,29 +383,237 @@ public class ClueGameManager : MonoBehaviour
         return tiles[UnityEngine.Random.Range(0, tiles.Count - 1)];
     }
 
+    public void SelectGuessCharacter(CharacterResourceManager.Cards character)
+    {
+        if(!isSelected)
+        {
+            isSelected = true;
+            guessCharacter = character;
+        }
+    }
+
     public void ChoosingGuessCharacter()
     {
+        if(isSelected)
+        {
+            characterGuessParent.SetActive(false);
+            weaponGuessParent.SetActive(true);
+            isSelected = false;
+            turnState = TurnState.ChoosingGuessWeapon;
+        } 
+        else if(!IsCurrentTurnHuman())
+        {
+            aiTimer += Time.deltaTime;
+            if(aiTimer > 1)
+            {
+                aiTimer = 0;
+                AIChooseGuessCharacter();
+            }
+        }
+    }
 
+    private void AIChooseGuessCharacter()
+    {
+        if (UnityEngine.Random.Range(1, 100) < 50)
+        {
+            List<CharacterResourceManager.Cards> characters = new List<CharacterResourceManager.Cards>();
+            foreach (CharacterResourceManager.Cards card in CharacterResourceManager.Characters)
+            {
+                if (!ClueData.Instance.HasPlayerSeenCard(card, turnManager.CurrentTurn - 1))
+                {
+                    characters.Add(card);
+                }
+            }
+            SelectGuessCharacter(characters[UnityEngine.Random.Range(0, characters.Count - 1)]);
+        }
+        else
+        {
+            SelectGuessCharacter(CharacterResourceManager.Characters[UnityEngine.Random.Range(0, CharacterResourceManager.Characters.Count - 1)]);
+        }
+    }
+
+    public void SelectGuessWeapon(CharacterResourceManager.Cards card)
+    {
+        if(!isSelected)
+        {
+            isSelected = true;
+            guessWeapon = card;
+        }
     }
 
     public void ChoosingGuessWeapon()
     {
+        if(isSelected)
+        {
+            isSelected = false;
+            weaponGuessParent.SetActive(false);
+            guess = new Guess(guessCharacter, guessWeapon, guessRoom);
+            guessDisplay.Set(guess, turnManager.CurrentTurn);
+            guessDisplay.gameObject.SetActive(true);
+            turnState = TurnState.ShowingGuess;
+        }
+        else if(!IsCurrentTurnHuman())
+        {
+            aiTimer += Time.deltaTime;
+            if(aiTimer > 1)
+            {
+                aiTimer = 0;
+                AIChooseGuessWeapon();
+            }
+        }
+    }
 
+    private void AIChooseGuessWeapon()
+    {
+        if(UnityEngine.Random.Range(1, 100) < 50)
+        {
+            List<CharacterResourceManager.Cards> weapons = new List<CharacterResourceManager.Cards>();
+            foreach (CharacterResourceManager.Cards weapon in CharacterResourceManager.Weapons)
+            {
+                if (!ClueData.Instance.HasPlayerSeenCard(weapon, turnManager.CurrentTurn - 1))
+                {
+                    weapons.Add(weapon);
+                }
+            }
+            SelectGuessWeapon(weapons[UnityEngine.Random.Range(0, weapons.Count - 1)]);
+        }
+        else
+        {
+            SelectGuessWeapon(CharacterResourceManager.Weapons[UnityEngine.Random.Range(0, CharacterResourceManager.Weapons.Count - 1)]);
+        }
+    }
+
+    public void ShowingGuess()
+    {
+        aiTimer += Time.deltaTime;
+        if(aiTimer > 5)
+        {
+            aiTimer = 0;
+            guessDisplay.gameObject.SetActive(false);
+            turnState = TurnState.FindingCards;
+        }
     }
 
     public void FindingCards()
     {
+        CharacterResourceManager.Cards cardToShow = CharacterResourceManager.Cards.Antifreeze;
+        TurnState targetState = TurnState.PreTurn;
+        int showedCardSource = -1; // sure
+        turnManager.PushStack();
+
+        int cT = turnManager.CurrentTurn;
+        bool control = true; // yes, this is how lazy i am, no need to bother writing a real algorithm
+
+        while(control)
+        {
+            turnManager.NextTurn();
+            if (turnManager.CurrentTurn == cT)
+            {
+                targetState = TurnState.AccusationOption;
+                control = false;
+            }
+            else
+            {
+                // Yes, this is going to be how it works, deal with it (in real clue there is a choice of what card to show)
+                if (ClueData.Instance.HasPlayerCard(guess.Character, turnManager.CurrentTurn - 1))
+                {
+                    control = false;
+                    targetState = TurnState.ShowingCards;
+                    cardToShow = guess.Character;
+                    showedCardSource = turnManager.CurrentTurn;
+                }
+                else if (ClueData.Instance.HasPlayerCard(guess.Weapon, turnManager.CurrentTurn - 1))
+                {
+                    control = false;
+                    targetState = TurnState.ShowingCards;
+                    cardToShow = guess.Weapon;
+                    showedCardSource = turnManager.CurrentTurn;
+                }
+                else if (ClueData.Instance.HasPlayerCard(guess.Room, turnManager.CurrentTurn - 1))
+                {
+                    control = false;
+                    targetState = TurnState.ShowingCards;
+                    cardToShow = guess.Room;
+                    showedCardSource = turnManager.CurrentTurn;
+                }
+            }
+        }
+
+        turnManager.PopStack();
+
+        if(targetState.Equals(TurnState.ShowingCards))
+        {
+            ClueData.Instance.ShowPlayerCard(cardToShow, turnManager.CurrentTurn - 1);
+            if(IsCurrentTurnHuman() || showedCardSource == 1)
+            {
+                cardShow.Set(CharacterResourceManager.CardImageTexture(cardToShow), showedCardSource);
+            }
+            else
+            {
+                cardShow.Set(cardBack, showedCardSource);
+            }
+            guessDisplay.gameObject.SetActive(false);
+            humanCardsDisplay.ShowAll();
+            cardShow.gameObject.SetActive(true);
+            turnState = TurnState.ShowingCards;
+        }
+        else if(targetState.Equals(TurnState.AccusationOption))
+        {
+            guessDisplay.gameObject.SetActive(false);
+            humanCardsDisplay.ShowAll();
+            isSelected = false;
+            aiTimer = 0;
+            makeAccusation = false;
+            accusationOption.Set(guess);
+            accusationOption.gameObject.SetActive(true);
+            turnState = TurnState.AccusationOption;
+        }
 
     }
 
     public void ShowingCards()
     {
+        if(Input.GetKeyUp(KeyCode.Space))
+        {
+            cardShow.gameObject.SetActive(false);
+            turnState = TurnState.PostTurn;
+        }
+    }
 
+    public void SelectAccusationOption(bool option)
+    {
+        if(!isSelected)
+        {
+            isSelected = true;
+            makeAccusation = option;
+        }
     }
 
     public void AccusationOption()
     {
-
+        if(isSelected)
+        {
+            accusationOption.gameObject.SetActive(false);
+            if(makeAccusation)
+            {
+                guessDisplay.Set(guess, turnManager.CurrentTurn, true);
+                guessDisplay.gameObject.SetActive(true);
+                turnState = TurnState.MakingAccusation;
+            }
+            else
+            {
+                turnState = TurnState.PostTurn;
+            }
+        }
+        else if(!IsCurrentTurnHuman())
+        {
+            aiTimer += Time.deltaTime;
+            if(aiTimer > 1)
+            {
+                aiTimer = 0;
+                SelectAccusationOption(UnityEngine.Random.Range(1, 100) < 75);
+            }
+        }
     }
 
     public void MakingAccusation()
@@ -392,7 +627,7 @@ public class ClueGameManager : MonoBehaviour
         turnState = TurnState.PreTurn;
     }
 
-    private bool isCurrentTurnHuman()
+    public bool IsCurrentTurnHuman()
     {
         return turnManager.CurrentTurn == 1;
     }

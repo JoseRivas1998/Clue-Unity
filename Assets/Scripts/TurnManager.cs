@@ -135,7 +135,6 @@ public class TurnManager : MonoBehaviour
             }
         }
         stringBuilder.Append("]");
-        print(stringBuilder.ToString());
     }
 
     public void NextTurn()

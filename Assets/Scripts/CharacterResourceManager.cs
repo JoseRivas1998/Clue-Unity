@@ -64,12 +64,12 @@ public class CharacterResourceManager
         { Cards.ScoobyDoo, "CardImages/scooby" },
         { Cards.Sherlock, "CardImages/sherlock" },
         { Cards.MurderV, "CardImages/victim" },
-        { Cards.Machete, "CardImages/pending" },
-        { Cards.Bazooka, "CardImages/pending" },
-        { Cards.Antifreeze, "CardImages/pending" },
-        { Cards.Chainsaw, "CardImages/pending" },
-        { Cards.Spoon, "CardImages/pending" },
-        { Cards.Syringe, "CardImages/pending" },
+        { Cards.Machete, "CardImages/pending_machete" },
+        { Cards.Bazooka, "CardImages/pending_bazooka" },
+        { Cards.Antifreeze, "CardImages/pending_antifreeze" },
+        { Cards.Chainsaw, "CardImages/pending_chainsaw" },
+        { Cards.Spoon, "CardImages/pending_spoon" },
+        { Cards.Syringe, "CardImages/pending_syringe" },
         { Cards.HannibalsKitchen, "CardImages/pending" },
         { Cards.PuppetRoom, "CardImages/pending" },
         { Cards.Cemetary, "CardImages/pending" },
@@ -79,7 +79,16 @@ public class CharacterResourceManager
         { Cards.Maze, "CardImages/pending" },
     };
 
-    // TODO: Map Cards to Textures, Load Texture based on Given Card
+    private readonly static Dictionary<Cards, Vector3> _roomCenters = new Dictionary<Cards, Vector3>
+    {
+        { Cards.HannibalsKitchen, new Vector3(0.065f, 0, 4.03f)},
+        { Cards.PuppetRoom, new Vector3(5.231f, 0, 0.28f)},
+        { Cards.Cemetary, new Vector3(-4.83f, 0, -2.23f)},
+        { Cards.ChuckysPlayroom, new Vector3(4.269f, 0f, 2.931f)},
+        { Cards.Nursery, new Vector3(-4.485f, 0f, 1.09f)},
+        { Cards.Morge, new Vector3(-0.33f, 0, -3.776f)},
+        { Cards.Maze, new Vector3(3.672f, 0f, -2.239f)},
+    };
 
     private static List<Cards> FilterCards(System.Predicate<Cards> filter)
     {
@@ -104,6 +113,11 @@ public class CharacterResourceManager
     public readonly static List<Cards> Characters = FilterCardsOfType(CardType.Character);
     public readonly static List<Cards> Weapons = FilterCardsOfType(CardType.Weapon);
     public readonly static List<Cards> Rooms = FilterCardsOfType(CardType.Room);
+
+    public static Vector3 RoomLocation(Cards room)
+    {
+        return _roomCenters[room];
+    }
 
     public static string CardImage(Cards card)
     {

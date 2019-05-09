@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -61,7 +62,7 @@ public class ClueData : Singleton<ClueData>
         }
         for(int i = 0; i < result.Count; i++)
         {
-            Swap(result, i, Random.Range(0, result.Count - 1));
+            Swap(result, i, UnityEngine.Random.Range(0, result.Count - 1));
         }
         return result;
     } 
@@ -86,6 +87,7 @@ public class ClueData : Singleton<ClueData>
         List<CharacterResourceManager.Cards> weapons = CopyAndShuffle(CharacterResourceManager.Weapons);
         List<CharacterResourceManager.Cards> rooms = CopyAndShuffle(CharacterResourceManager.Rooms);
         this.solution = new Guess(characters[characters.Count - 1], weapons[weapons.Count - 1], rooms[rooms.Count - 1]);
+        print(this.solution);
         characters.RemoveAt(characters.Count - 1);
         weapons.RemoveAt(weapons.Count - 1);
         rooms.RemoveAt(rooms.Count - 1);
@@ -145,4 +147,8 @@ public class ClueData : Singleton<ClueData>
         playerData[player].ShowCard(card);
     }
 
+    public bool HasPlayerCard(CharacterResourceManager.Cards card, int player)
+    {
+        return playerData[player].HasCard(card);
+    }
 }
