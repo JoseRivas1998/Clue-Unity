@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class ClueGameManager : MonoBehaviour
 {
@@ -18,6 +19,13 @@ public class ClueGameManager : MonoBehaviour
     public Texture2D cardBack;
     public CardShow cardShow;
     public AccusationOption accusationOption;
+
+    public GameObject MachetePrefab;
+    public GameObject BazookaPrefab;
+    public GameObject AntifreezePrefab;
+    public GameObject ChainsawPrefab;
+    public GameObject SpoonPrefab;
+    public GameObject SyringePrefab;
 
     public Text currentTurnText;
 
@@ -127,6 +135,7 @@ public class ClueGameManager : MonoBehaviour
         }
     };
 
+
     public enum TurnState
     {
         PreTurn,
@@ -153,6 +162,8 @@ public class ClueGameManager : MonoBehaviour
     private CharacterResourceManager.Cards guessWeapon;
     private CharacterResourceManager.Cards guessRoom;
     private Guess guess;
+
+    private Dictionary<CharacterResourceManager.Cards, GameObject> weaponObjects;
 
     private float aiTimer;
 
@@ -441,6 +452,55 @@ public class ClueGameManager : MonoBehaviour
         }
     }
 
+    private GameObject GetWeaponPrefab(CharacterResourceManager.Cards weapon)
+    {
+        GameObject gameObject = MachetePrefab;
+        switch(weapon)
+        {
+            case CharacterResourceManager.Cards.Machete:
+                gameObject = MachetePrefab;
+                break;
+            case CharacterResourceManager.Cards.Bazooka:
+                gameObject = BazookaPrefab;
+                break;
+            case CharacterResourceManager.Cards.Antifreeze:
+                gameObject = AntifreezePrefab;
+                break;
+            case CharacterResourceManager.Cards.Chainsaw:
+                gameObject = ChainsawPrefab;
+                break;
+            case CharacterResourceManager.Cards.Spoon:
+                gameObject = SpoonPrefab;
+                break;
+            case CharacterResourceManager.Cards.Syringe:
+                gameObject = SyringePrefab;
+                break;
+        }
+        return gameObject;
+    }
+
+    private Vector3 RandomXZVector(float mag, float y)
+    {
+        float radians = UnityEngine.Random.Range(0, Mathf.PI * 2);
+        return new Vector3(mag * Mathf.Cos(radians), y, mag * Mathf.Sin(radians));
+    }
+
+    private void MoveWeaponLocation(CharacterResourceManager.Cards weapon, CharacterResourceManager.Cards room)
+    {
+        Vector3 location = CharacterResourceManager.RoomLocation(room) + RandomXZVector(0.5f, 1f);
+        if(weaponObjects == null || !weaponObjects.ContainsKey(weapon))
+        {
+            if (weaponObjects == null) weaponObjects = new Dictionary<CharacterResourceManager.Cards, GameObject>();
+            GameObject gameObject = Instantiate(GetWeaponPrefab(weapon), location, Quaternion.identity);
+            weaponObjects[weapon] = gameObject;
+        }
+        else
+        {
+            weaponObjects[weapon].transform.position = location;
+        }
+        weaponObjects[weapon].transform.Rotate(0, UnityEngine.Random.Range(0, 360f), 0);
+    }
+
     public void ChoosingGuessWeapon()
     {
         if(isSelected)
@@ -450,6 +510,7 @@ public class ClueGameManager : MonoBehaviour
             guess = new Guess(guessCharacter, guessWeapon, guessRoom);
             guessDisplay.Set(guess, turnManager.CurrentTurn);
             guessDisplay.gameObject.SetActive(true);
+            MoveWeaponLocation(guess.Weapon, guess.Room);
             turnState = TurnState.ShowingGuess;
         }
         else if(!IsCurrentTurnHuman())
@@ -618,7 +679,13 @@ public class ClueGameManager : MonoBehaviour
 
     public void MakingAccusation()
     {
-
+        aiTimer += Time.deltaTime;
+        if(aiTimer > 5)
+        {
+            ClueData.Instance.Guess = guess;
+            ClueData.Instance.PlayerAccusation = turnManager.CurrentTurn;
+            SceneManager.LoadScene("GameOverScene");
+        }
     }
 
     public void PostTurn()

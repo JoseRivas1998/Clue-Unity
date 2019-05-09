@@ -81,7 +81,7 @@ public class CharacterResourceManager
 
     private readonly static Dictionary<Cards, Vector3> _roomCenters = new Dictionary<Cards, Vector3>
     {
-        { Cards.HannibalsKitchen, new Vector3(0.065f, 0, 4.03f)},
+        { Cards.HannibalsKitchen, new Vector3(0.065f, 0, 3.29f)},
         { Cards.PuppetRoom, new Vector3(5.231f, 0, 0.28f)},
         { Cards.Cemetary, new Vector3(-4.83f, 0, -2.23f)},
         { Cards.ChuckysPlayroom, new Vector3(4.269f, 0f, 2.931f)},

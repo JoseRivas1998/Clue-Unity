@@ -16,9 +16,9 @@ public class ClueData : Singleton<ClueData>
     private PlayerData[] playerData = new PlayerData[4];
     private GameObject[] playerGameObjects = new GameObject[4];
     private RowCol[] playerLocations = new RowCol[4];
-    
-
-    private Guess solution;
+    public Guess Solution { get; private set; }
+    public Guess Guess;
+    public int PlayerAccusation;
 
     // Start is called before the first frame update
     void Start()
@@ -86,8 +86,8 @@ public class ClueData : Singleton<ClueData>
         List<CharacterResourceManager.Cards> characters = CopyAndShuffle(CharacterResourceManager.Characters);
         List<CharacterResourceManager.Cards> weapons = CopyAndShuffle(CharacterResourceManager.Weapons);
         List<CharacterResourceManager.Cards> rooms = CopyAndShuffle(CharacterResourceManager.Rooms);
-        this.solution = new Guess(characters[characters.Count - 1], weapons[weapons.Count - 1], rooms[rooms.Count - 1]);
-        print(this.solution);
+        this.Solution = new Guess(characters[characters.Count - 1], weapons[weapons.Count - 1], rooms[rooms.Count - 1]);
+        print(this.Solution);
         characters.RemoveAt(characters.Count - 1);
         weapons.RemoveAt(weapons.Count - 1);
         rooms.RemoveAt(rooms.Count - 1);
@@ -151,4 +151,5 @@ public class ClueData : Singleton<ClueData>
     {
         return playerData[player].HasCard(card);
     }
+
 }
