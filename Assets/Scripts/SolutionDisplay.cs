@@ -15,6 +15,12 @@ public class SolutionDisplay : MonoBehaviour
 
     public GameObject spaceText;
 
+    public AudioSource source;
+
+    public AudioClip drum;
+    public AudioClip bad;
+    public AudioClip good;
+
     private int currentActive;
 
     // Start is called before the first frame update
@@ -25,6 +31,9 @@ public class SolutionDisplay : MonoBehaviour
         room.target = CharacterResourceManager.CardImageTexture(ClueData.Instance.Solution.Room);
         currentActive = 0;
         character.Activate();
+        source.clip = drum;
+        source.loop = true;
+        source.Play();
     }
 
     // Update is called once per frame
@@ -47,6 +56,10 @@ public class SolutionDisplay : MonoBehaviour
             currentActive++;
             spaceText.SetActive(true);
             solutionText.text = "Player " + ClueData.Instance.PlayerAccusation + " Was " + (ClueData.Instance.Solution.Equals(ClueData.Instance.Guess) ? "Correct!" : "Incorrect!");
+            source.Stop();
+            source.loop = false;
+            source.clip = ClueData.Instance.Solution.Equals(ClueData.Instance.Guess) ? good : bad;
+            source.Play();
         }
 
         if(Input.GetKeyUp(KeyCode.Space) && room.IsDone())
