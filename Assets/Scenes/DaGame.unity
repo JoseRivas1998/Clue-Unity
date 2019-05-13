@@ -1652,7 +1652,7 @@ MonoBehaviour:
   characterGuessParent: {fileID: 426389828}
   weaponGuessParent: {fileID: 1253378729}
   guessDisplay: {fileID: 935111213}
-  cardBack: {fileID: 2800000, guid: 5c87e2727b543da45bef90fc99794a6c, type: 3}
+  cardBack: {fileID: 2800000, guid: ae95508c5d91f7f4385539347fea18d5, type: 3}
   cardShow: {fileID: 1102626307}
   accusationOption: {fileID: 2136334428}
   MachetePrefab: {fileID: 4412649882191293866, guid: c6d60159ee41419448e979ce424d8a7d,
@@ -1712,7 +1712,7 @@ MonoBehaviour:
   dicePrefab: {fileID: 833382649655659626, guid: 69bdf05627cc06a4b8e7997bb5fcad80,
     type: 3}
   worldCamera: {fileID: 1657965203}
-  numDice: 2
+  numDice: 3
   diceDistance: 1
   tossForce: 200
   minForceOffset: -100
