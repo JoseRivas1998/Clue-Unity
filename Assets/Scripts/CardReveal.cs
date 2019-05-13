@@ -38,8 +38,10 @@ public class CardReveal : MonoBehaviour
             if(rectTrans.eulerAngles.y <= 90.5 && !hasSwitched)
             {
                 img.texture = target;
+                hasSwitched = true;
             }
-            if(rectTrans.eulerAngles.y <= 0.5)
+            print(rectTrans.eulerAngles);
+            if(hasSwitched && (rectTrans.eulerAngles.y <= 0.5 || rectTrans.eulerAngles.y >= 180))
             {
                 rectTrans.eulerAngles = new Vector3(0, 0, 0);
                 state = CardRevealState.IsDone;

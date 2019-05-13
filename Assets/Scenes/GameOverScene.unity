@@ -371,6 +371,7 @@ MonoBehaviour:
   character: {fileID: 1196009491}
   weapon: {fileID: 1759679945}
   room: {fileID: 1831692822}
+  spaceText: {fileID: 1904904576}
 --- !u!1 &1196009487
 GameObject:
   m_ObjectHideFlags: 0
@@ -456,7 +457,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ac1b698e2b5c9448a265cdb45a24725, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  degreesPerSecond: -180
+  degreesPerSecond: -90
   target: {fileID: 0}
 --- !u!1 &1620009812
 GameObject:
@@ -694,7 +695,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ac1b698e2b5c9448a265cdb45a24725, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  degreesPerSecond: -180
+  degreesPerSecond: -90
   target: {fileID: 0}
 --- !u!1 &1831692818
 GameObject:
@@ -781,7 +782,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ac1b698e2b5c9448a265cdb45a24725, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  degreesPerSecond: -180
+  degreesPerSecond: -90
   target: {fileID: 0}
 --- !u!1 &1904904576
 GameObject:
@@ -795,12 +796,12 @@ GameObject:
   - component: {fileID: 1904904579}
   - component: {fileID: 1904904578}
   m_Layer: 5
-  m_Name: Text
+  m_Name: Press Space
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1904904577
 RectTransform:
   m_ObjectHideFlags: 0
@@ -932,7 +933,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Player # Was Incorrect!'
+  m_Text: 'Solution:'
 --- !u!222 &2015426630
 CanvasRenderer:
   m_ObjectHideFlags: 0

@@ -13,6 +13,8 @@ public class SolutionDisplay : MonoBehaviour
     public CardReveal weapon;
     public CardReveal room;
 
+    public GameObject spaceText;
+
     private int currentActive;
 
     // Start is called before the first frame update
@@ -21,7 +23,6 @@ public class SolutionDisplay : MonoBehaviour
         character.target = CharacterResourceManager.CardImageTexture(ClueData.Instance.Solution.Character);
         weapon.target = CharacterResourceManager.CardImageTexture(ClueData.Instance.Solution.Weapon);
         room.target = CharacterResourceManager.CardImageTexture(ClueData.Instance.Solution.Room);
-        solutionText.text = "Player " + ClueData.Instance.PlayerAccusation + " Was " + (ClueData.Instance.Solution.Equals(ClueData.Instance.Guess) ? "Correct!" : "Incorrect!");
         currentActive = 0;
         character.Activate();
     }
@@ -39,6 +40,13 @@ public class SolutionDisplay : MonoBehaviour
         {
             currentActive++;
             room.Activate();
+        }
+
+        if(currentActive == 2 && room.IsDone())
+        {
+            currentActive++;
+            spaceText.SetActive(true);
+            solutionText.text = "Player " + ClueData.Instance.PlayerAccusation + " Was " + (ClueData.Instance.Solution.Equals(ClueData.Instance.Guess) ? "Correct!" : "Incorrect!");
         }
 
         if(Input.GetKeyUp(KeyCode.Space) && room.IsDone())

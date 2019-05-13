@@ -1712,7 +1712,7 @@ MonoBehaviour:
   dicePrefab: {fileID: 833382649655659626, guid: 69bdf05627cc06a4b8e7997bb5fcad80,
     type: 3}
   worldCamera: {fileID: 1657965203}
-  numDice: 3
+  numDice: 2
   diceDistance: 1
   tossForce: 200
   minForceOffset: -100
