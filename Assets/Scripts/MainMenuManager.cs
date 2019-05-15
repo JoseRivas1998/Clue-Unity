@@ -14,5 +14,6 @@ public class MainMenuManager : MonoBehaviour
     void Start()
     {
         playButton.onClick.AddListener(() => { SceneManager.LoadScene("SelectCharacter"); });
+        backButton.onClick.AddListener(() => { SceneManager.LoadScene("SupaMainMenu"); });
     }
 }
