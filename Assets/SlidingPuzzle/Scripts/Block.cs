@@ -15,7 +15,7 @@ public class Block : MonoBehaviour
         this.startingCoord = startingCoord;
         coord = startingCoord;
 
-        GetComponent<MeshRenderer>().material.shader = Shader.Find("Unlit/Texture");
+        GetComponent<MeshRenderer>().material.shader = Shader.Find("Sprites/Default");
         GetComponent<MeshRenderer>().material.mainTexture = image;
     }
 
