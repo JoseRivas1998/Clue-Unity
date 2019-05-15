@@ -25,6 +25,9 @@ public class JengaManager : MonoBehaviour
     public int numOfPlayers;
     private bool gameInProgress;
 
+    public GameObject gameOverText;
+    public Button resetButton;
+
     protected JengaManager() { }
     
     private void Start()
@@ -36,9 +39,24 @@ public class JengaManager : MonoBehaviour
         pieceSelected = false;
         isPaused = false;
         gameInProgress = false;
-        Time.timeScale = 1.0f;
 
         SpawnJengaPieces();
+
+
+        resetButton.onClick.AddListener(() =>
+        {
+            currentLayer = 0;
+            pieceSelected = false;
+            gameInProgress = false;
+            isPaused = false;
+            table.GetComponent<TableTouching>().piecesTouching = 0;
+            gameOverText.SetActive(false);
+            Camera.main.GetComponent<FlyCamera>().enabled = true;
+            resetButton.gameObject.SetActive(false);
+            canMove = true;
+            ResetPieces();
+        });
+
     }
 
     private void Update()
@@ -46,10 +64,6 @@ public class JengaManager : MonoBehaviour
 
         if (!isPaused)
         {
-            if (Input.GetKeyUp("r"))
-            {
-                ResetPieces();
-            }
 
             if (Input.GetKeyUp("c"))
             {
@@ -126,6 +140,8 @@ public class JengaManager : MonoBehaviour
         gameInProgress = false;
         isPaused = true;
         Camera.main.GetComponent<FlyCamera>().enabled = false;
+        gameOverText.SetActive(true);
+        resetButton.gameObject.SetActive(true);
     }
 
 }

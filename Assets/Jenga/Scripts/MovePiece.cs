@@ -124,7 +124,7 @@ public class MovePiece : MonoBehaviour
 
         _rigidbody.Sleep();
 
-        if ( Input.GetMouseButtonDown(1))
+        if ( Input.GetKeyDown(KeyCode.R))
         {
             transform.Rotate(transform.rotation.x, transform.rotation.y + 90, transform.rotation.z);
         }

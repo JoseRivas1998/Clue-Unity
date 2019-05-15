@@ -20,6 +20,13 @@ public class Puzzle : MonoBehaviour
     int shuffleMovesRemaining;
     Vector2Int prevShuffleOffset;
 
+    public GameObject solved;
+    public GameObject pressSpace;
+
+    public AudioSource source;
+    public AudioClip slide;
+    public AudioClip sovleSound;
+
     private void Start()
     {
         CreatePuzzle();
@@ -85,7 +92,11 @@ public class Puzzle : MonoBehaviour
     {
         if ((blockToMove.coord - emptyBlock.coord).sqrMagnitude == 1)
         {
-
+            if(!blockIsMoving && !state.Equals(PuzzleState.Shuffling))
+            {
+                source.clip = slide;
+                source.Play();
+            }
             blocks[blockToMove.coord.x, blockToMove.coord.y] = emptyBlock;
             blocks[emptyBlock.coord.x, emptyBlock.coord.y] = blockToMove;
 
@@ -125,6 +136,8 @@ public class Puzzle : MonoBehaviour
 
     void StartShuffle()
     {
+        solved.SetActive(false);
+        pressSpace.SetActive(false);
         state = PuzzleState.Shuffling;
         shuffleMovesRemaining = shuffleLength;
         emptyBlock.gameObject.SetActive(false);
@@ -165,6 +178,11 @@ public class Puzzle : MonoBehaviour
         }
 
         state = PuzzleState.Solved;
+        source.Stop();
+        source.clip = sovleSound;
+        source.Play();
         emptyBlock.gameObject.SetActive(true);
+        solved.SetActive(true);
+        pressSpace.SetActive(true);
     }
 }

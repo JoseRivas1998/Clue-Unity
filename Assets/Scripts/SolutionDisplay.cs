@@ -64,7 +64,7 @@ public class SolutionDisplay : MonoBehaviour
 
         if(Input.GetKeyUp(KeyCode.Space) && room.IsDone())
         {
-            SceneManager.LoadScene(0);
+            SceneManager.LoadScene("MainMenu");
         }
     }
 }

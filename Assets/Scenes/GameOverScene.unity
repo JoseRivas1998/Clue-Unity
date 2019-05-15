@@ -423,7 +423,6 @@ RectTransform:
   - {fileID: 1759679942}
   - {fileID: 1831692819}
   - {fileID: 1766866387}
-  - {fileID: 1904904577}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -448,7 +447,7 @@ MonoBehaviour:
   character: {fileID: 1196009491}
   weapon: {fileID: 1759679945}
   room: {fileID: 1831692822}
-  spaceText: {fileID: 1904904576}
+  spaceText: {fileID: 1766866386}
   source: {fileID: 1041558894}
   drum: {fileID: 8300000, guid: d8f7fb9f303fbdc4a8c5b2a31aa9af12, type: 3}
   bad: {fileID: 8300000, guid: 64d9819b7b9c5cc4b9acbdb913b7f417, type: 3}
@@ -891,7 +890,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1766866387
 RectTransform:
   m_ObjectHideFlags: 0
@@ -902,7 +901,8 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 1904904577}
   m_Father: {fileID: 1041558892}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1060,16 +1060,16 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1904904576}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1041558892}
-  m_RootOrder: 7
+  m_Father: {fileID: 1766866387}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 392, y: -314}
+  m_AnchoredPosition: {x: 10.300018, y: 9.9999695}
   m_SizeDelta: {x: 241.15, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1904904578
